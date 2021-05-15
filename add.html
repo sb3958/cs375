@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Fitness App</title>
+    <style type="text/css">
+        table, tr, th {
+            border: 1px solid black;
+            align-items: center;
+            border-collapse: collapse;
+            padding: 10px;
+        }
+        .page-header {
+            background: lightgreen;
+            text-align: center;
+            padding: 0.25%;
+        }
+        .user-panel {
+            width: 50%;
+            position: fixed;
+        }
+        .login {
+            left: 0;
+            background: lightskyblue;
+            padding-left: 2%;
+            padding-bottom: 1%;
+        }
+        .create {
+            right: -2%;
+            background: lightblue;
+            padding-left: 2%;
+            padding-bottom: 1%;
+        }
+        .data-div {
+            position: fixed;
+            top: 45%;
+            margin-left: 5%;
+        }
+        .update-div {
+            position: fixed;
+            top: 75%;
+            margin-left: 5%;
+        }
+        .msg {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-header">
+    <h1>Fitness App</h1>
+    <p style="text-align: center;"><img src="logo.jpg" alt="running-logo"></p>
+    <div class="msg" id="login-msg">Please login or create a new account</div>
+</div>
+
+<div class="user-panel login">
+    <h2>Log in</h2>
+    <div>
+        <div>
+            <label name="login-username" for="login-username">Username:</label>
+            <input type="text" id="login-username">
+        </div>
+        <div>
+            <label name="login-password" for="login-password">Password:</label>
+            <input type="password" id="login-password">
+        </div>
+    </div>
+    <button id="login">Log in</button>
+</div>
+
+<div class="user-panel create">
+    <h2>Create new account</h2>
+    <div>
+        <div>
+            <label name="create-username" for="create-username">Username:</label>
+            <input type="text" id="create-username">
+        </div>
+        <div>
+            <label name="create-password" for="create-password">Password:</label>
+            <input type="password" id="create-password">
+        </div>
+    </div>
+    <button id="create">Create account</button>
+</div>
+
+<div class="data-div">
+    <h2>Add data for today</h2>
+    <div>
+        <div>
+            <label for="data-username">Username:</label>
+            <input id="data-username" type="text" value="">
+        </div>
+        <div>
+            <label for="age">Age:</label>
+            <input id="age" type="number" value="">
+        </div>
+        <div>
+            <label for="height">Height(cm):</label>
+            <input id="height" type="number" value="">
+        </div>
+        <div>
+            <label for="weight">Weight(kg):</label>
+            <input id="weight" type="number" value="">
+        </div>
+        <div>
+            <label for="BMI">BMI:</label>
+            <input id="BMI" type="number" value="">
+        </div>
+        <div>
+            <label>Privacy</label>
+            <input type="radio" name="privacy" value="yes">
+            <label>Private</label>
+            <input type="radio" name="privacy" value="no">
+            <label>Public</label>
+        </div>
+        <div>
+            <label for="running-goal">Running Goal(km):</label>
+            <input id="running-goal" type="number" value="">
+        </div>
+        <div>
+            <label for="running-progess">Running Progress Today(km):</label>
+            <input id="running-progess" type="number" value="">
+        </div>
+        <div>
+            <label>Have you achieved the Goal?</label>
+            <input type="radio" name="achieved-goal" value="yes">
+            <label>Yes</label>
+            <input type="radio" name="achieved-goal" value="no">
+            <label>No</label>
+        </div>
+    </div>
+    <button id="add-button">Add</button>
+</div>
+
+<div class="update-div">
+    <h2>Update data</h2>
+    <div>
+        <div>
+            <label for="update-date">Updating Date:</label>
+            <input id="update-date" type="text" name="update-date">
+        </div>
+        <div>
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <option value="">Please select a category to update</option>
+                <option value="age">Age</option>
+                <option value="height">Height</option>
+                <option value="weight">Weight</option>
+                <option value="BMI">BMI</option>
+                <option value="privacy">Privacy</option>
+                <option value="goal">Running Goal</option>
+                <option value="progress">Running Progress</option>
+            </select>
+        </div>
+        <div>
+            <label for="update-data">Content:</label>
+            <input id="update-data" type="text" value="Enter new value here">
+        </div>
+    </div>
+    <button id="update-button">Update</button>
+    <p><a href="search.html">Search your data</a></p>
+</div>
+
+<script></script>
+
+</body>
+</html>
