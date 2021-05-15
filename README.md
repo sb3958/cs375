@@ -4,10 +4,10 @@
 #### Record the running progress and fitness data of users to achieve a running goal.
 
 #### app/
-####   public_html/
-####     add.html
-####     add.js
-####     logo.jpg
-####     search.html
-####     search.js
-####   server.js
+#### __public_html/
+#### ____add.html
+#### ____add.js
+#### ____logo.jpg
+#### ____search.html
+#### ____search.js
+#### __server.js
