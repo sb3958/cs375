@@ -1,0 +1,9 @@
+body {
+	background-color: lightseagreen;
+}
+
+#search {
+	background-color: lightblue;
+	color: blue;
+	margin: 50px;
+}
