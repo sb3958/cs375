@@ -23,26 +23,34 @@
             left: 0;
             background: lightskyblue;
             padding-left: 2%;
-            padding-bottom: 1%;
+            padding-bottom: 0.5%;
         }
         .create {
             right: -2%;
             background: lightblue;
             padding-left: 2%;
-            padding-bottom: 1%;
+            padding-bottom: 0.5%;
         }
         .data-div {
             position: fixed;
-            top: 45%;
-            margin-left: 5%;
+            top: 42%;
+            margin-left: 40%;
+            border: 1px solid black;
+            padding: 0.5rem;
+            font-weight: bold;
         }
         .update-div {
             position: fixed;
             top: 75%;
-            margin-left: 5%;
+            margin-left: 42%;
+            border: 1px solid black;
+            padding: 0.5rem;
+            font-weight: bold;
         }
         .msg {
             text-align: center;
+            color: red;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -51,7 +59,7 @@
 <div class="page-header">
     <h1>Fitness App</h1>
     <p style="text-align: center;"><img src="logo.jpg" alt="running-logo"></p>
-    <div class="msg" id="login-msg">Please login or create a new account</div>
+    <div class="msg" id="msg">Please login or create a new account</div>
 </div>
 
 <div class="user-panel login">
@@ -66,7 +74,7 @@
             <input type="password" id="login-password">
         </div>
     </div>
-    <button id="login">Log in</button>
+    <button id="login-button">Log in</button>
 </div>
 
 <div class="user-panel create">
@@ -81,11 +89,11 @@
             <input type="password" id="create-password">
         </div>
     </div>
-    <button id="create">Create account</button>
+    <button id="create-button">Create account</button>
 </div>
 
 <div class="data-div">
-    <h2>Add data for today</h2>
+    <h2>Setting Up Running Goal</h2>
     <div>
         <div>
             <label for="data-username">Username:</label>
@@ -104,15 +112,15 @@
             <input id="weight" type="number" value="">
         </div>
         <div>
-            <label for="BMI">BMI:</label>
-            <input id="BMI" type="number" value="">
+            <label for="bmi">BMI:</label>
+            <input id="bmi" type="number" value="">
         </div>
         <div>
-            <label>Privacy</label>
+            <label>Privacy:</label>
             <input type="radio" name="privacy" value="yes">
-            <label>Private</label>
-            <input type="radio" name="privacy" value="no">
             <label>Public</label>
+            <input type="radio" name="privacy" value="no">
+            <label>Private</label>
         </div>
         <div>
             <label for="running-goal">Running Goal(km):</label>
@@ -147,7 +155,7 @@
                 <option value="age">Age</option>
                 <option value="height">Height</option>
                 <option value="weight">Weight</option>
-                <option value="BMI">BMI</option>
+                <option value="bmi">BMI</option>
                 <option value="privacy">Privacy</option>
                 <option value="goal">Running Goal</option>
                 <option value="progress">Running Progress</option>
@@ -162,7 +170,7 @@
     <p><a href="search.html">Search your data</a></p>
 </div>
 
-<script></script>
+<script src="add.js"></script>
 
 </body>
 </html>
