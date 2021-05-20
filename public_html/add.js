@@ -12,29 +12,6 @@ function getLoginInfo(){
     return {"username": username, "password": pw};
 }
 
-let loginButton = document.getElementById("login-button");
-loginButton.addEventListener("click"), function(){
-    let loginInfo = getLoginInfo();
-    fetch("/login", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(loginInfo),
-    }).then(function(response){
-        let msg = document.getElementById("msg");
-        if (response.status === 200){
-            msg.textContent = `Login Successfully. You are logged in as ${loginInfo.username}`;
-            authenticate = true;
-        }
-        else{
-            response.json().then(function(data){
-                msg.textContent = "Login Failed. " + data.error;
-            })
-        }
-    }).catch(function(err){
-        console.log(err);
-    });
-};
-
 /* Functions for creating new user */
 function getNewUser(){
     let usernameInput = document.getElementById("create-username");
@@ -45,29 +22,6 @@ function getNewUser(){
 
     return {"username": username, "password": pw};
 }
-
-let createButton = document.getElementById("create-button");
-createButton.addEventListener("click"), function(){
-    let newUserInfo = getNewUser();
-    fetch("/create", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(newUserInfo),
-    }).then(function(response){
-        let msg = document.getElementById("msg");
-        if (response.status === 200){
-            msg.textContent = `Create New User Successfully. You are logged in as ${newUserInfo.username}`;
-            authenticate = true;
-        }
-        else{
-            response.json().then(function(data){
-                msg.textContent = "Create New User Failed. " + data.error;
-            })
-        }
-    }).catch(function(err){
-        console.log(err);
-    });
-};
 
 /* Functions for add running data */
 function getGoal() {
@@ -122,6 +76,73 @@ function getGoal() {
         };
 }
 
+/* Functions for Updating data. */
+function getUpdateCategory() {
+	let allCategory = document.getElementById("category");
+	let selectedIndex = allCategory.selectedIndex;
+	let selectedCategory = allCategory.options[selectedIndex];
+	return selectedCategory.value;
+}
+
+function getUpdateData(){
+    let updateDateInput = document.getElementById("update-date");
+    let updateDate = updateDateInput.value;
+
+    let category = getUpdateCategory();
+
+    let contentInput = document.getElementById("update-data");
+    let newContent = contentInput.value;
+
+    return {"date": updateDate, "category": category, "newContent": newContent};
+}
+
+/* Handles Buttons click events */
+let loginButton = document.getElementById("login-button");
+loginButton.addEventListener("click", function(){
+    let loginInfo = getLoginInfo();
+    fetch("/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(loginInfo),
+    }).then(function(response){
+        let msg = document.getElementById("msg");
+        if (response.status === 200){
+            msg.textContent = `Login Successfully. You are logged in as ${loginInfo.username}`;
+            authenticate = true;
+        }
+        else{
+            response.json().then(function(data){
+                msg.textContent = "Login Failed. " + data.error;
+            })
+        }
+    }).catch(function(err){
+        console.log(err);
+    });
+});
+
+let createButton = document.getElementById("create-button");
+createButton.addEventListener("click", function(){
+    let newUserInfo = getNewUser();
+    fetch("/create", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(newUserInfo),
+    }).then(function(response){
+        let msg = document.getElementById("msg");
+        if (response.status === 200){
+            msg.textContent = `Create New User Successfully. You are logged in as ${newUserInfo.username}`;
+            authenticate = true;
+        }
+        else{
+            response.json().then(function(data){
+                msg.textContent = "Create New User Failed. " + data.error;
+            })
+        }
+    }).catch(function(err){
+        console.log(err);
+    });
+});
+
 let addButton = document.getElementById("add-button");
 addButton.addEventListener("click", function(){
     if (!authenticate){
@@ -150,26 +171,6 @@ addButton.addEventListener("click", function(){
     }); 
 });
 
-/* Functions for Updating data. */
-function getUpdateCategory() {
-	let allCategory = document.getElementById("category");
-	let selectedIndex = allCategory.selectedIndex;
-	let selectedCategory = allCategory.options[selectedIndex];
-	return selectedCategory.value;
-}
-
-function getUpdateData(){
-    let updateDateInput = document.getElementById("update-date");
-    let updateDate = updateDateInput.value;
-
-    let category = getUpdateCategory();
-
-    let contentInput = document.getElementById("update-data");
-    let newContent = contentInput.value;
-
-    return {"date": updateDate, "category": category, "newContent": newContent};
-}
-
 let updateButton = document.getElementById("update-button");
 updateButton.addEventListener("click", function(){
     if (!authenticate){
@@ -197,4 +198,3 @@ updateButton.addEventListener("click", function(){
         console.log(error);
     }); 
 });
-
