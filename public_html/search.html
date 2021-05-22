@@ -6,17 +6,33 @@
 	<link rel="stylesheet" type="text/css" href="search.css">
 </head>
 <body>
-	<h1>The Rock's Fitness Tracker</h1>
-	
-	<div>
-		<label for="username">Enter your username: </label>
-		<input type="text" id="username" name="username">
-	</div>
-	<div>
-		<button id="search">Search</button>
-	</div>
-	<div id="message"></div>
+	<h1>Fitness App</h1>
+    <img src="logo.jpg" alt="Logo" id="logoID">
 
+	
+    <div class="search-div">
+        <label for="username">Enter your username: </label>
+        <input type="text" id="username" name="username">
+    </div>
+    <div id="button-div">
+        <button id="search">Search</button>
+    </div>
+    <div id="message"></div>
+    <div id="table-div">
+        <table>
+            <thead id="table-header">
+                <tr>
+                    <th>Height</th>
+                    <th>Weight</th>
+                    <th>BMI</th>
+                    <th>Running Goal</th>
+                    <th>Achieved</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
+       
 
 	<script src="search.js"></script>
 </body>
