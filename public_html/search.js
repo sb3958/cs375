@@ -13,10 +13,21 @@ function removeRows(element) {
 let button = document.getElementById("search");
 button.addEventListener("click", function(){
     let username = getUsername();
-    let url = `/search?username=${username}`
-    fetch(url).then (function (response){
+    let infoUrl = `/searchinfo?username=${username}`
+    console.log("Search Info "+ infoUrl)
+    fetch(infoUrl).then (function (response){
         return response.json().then (function (data){
             
         })
     })
+    let progressUrl = `/searchprogress?username=${username}`
+    console.log("Search Progress "+ progressUrl)
+    fetch(progressUrl).then (function (progress){
+        return progess.json().then (function (progressData){
+                
+        })
+    })
+
+
 })
+
