@@ -1,11 +1,13 @@
 const pg = require("pg");
 const express = require("express");
 const app = express();
+const bcrypt = require("bcrypt");
 
 const port = 3000;
 const hostname = "localhost";
 
 const env = require("../env.json");
+const { response } = require("express");
 const Pool = pg.Pool;
 const pool = new Pool(env);
 pool.connect().then(function () {
@@ -116,6 +118,72 @@ app.get("/searchprogress", function(req, res) {
         res.json({"progress": response.rows});
     });
 });
+
+app.post("/create", function(req, res) {
+    let username = req.body.username;
+    let password = req.body.password;
+    
+    if (username === undefined || username.length > 20 || username.length < 1) {
+        res.status(401);
+        res.json({"error":"Invalid username"});
+    }
+    else if (password === undefined || password.length > 36 || password.length < 6) {
+        res.status(401);
+        res.json({"error": "Invalid password"});
+    }
+
+    pool.query("SELECT * FROM accounts WHERE username = $1", [username]).then(function(response) {
+        if (response.rows.length !== 0) {
+            res.status(401);
+            res.json({"error":"username exists"});
+        }
+        else {
+            bcrypt.hash(password, 10).then(function(hasedPassword) {
+                pool.query("INSERT INTO accounts(username, hashedpassword) VALUES($1, $2)", [username, hasedPassword]).then(function(response){
+                    res.status(200);
+                    res.send();
+                }).catch(function(error) {
+                    res.status(401);
+                    res.json({"error": error});
+                });
+            }).catch(function(error) {
+                res.status(401);
+                res.json({"error": error});
+            })
+        }
+    });
+
+});
+
+app.post("/login", function(req, res) {
+    let username = req.body.username;
+    let password = req.body.password;
+
+    pool.query("SELECT hashedpassword FROM accounts WHERE username = $1", [
+        username]).then(function(response) {
+            if (response.rows.length === 0) {
+                res.status(401);
+                res.json({"error": "username does not exist."});
+            }
+            let hashedPassword = response.rows[0].hashedpassword;
+            bcrypt.compare(password, hashedPassword).then(function(isSame){
+                if (isSame) {
+                    res.status(200);
+                    console.log("login successfully");
+                    res.send()
+                } else {
+                    res.status(401);
+                    res.json({"error": "incorrect password"});
+                }
+            }).catch(function(error) {
+                res.status(401);
+                res.json({"error": error});
+            });
+        }).catch(function(error){
+            res.status(401);
+            res.json({"error": error});
+        });
+})
 
 function ownProperty(data) {
     let propertyList = [
