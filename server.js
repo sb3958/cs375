@@ -60,7 +60,7 @@ app.post("/add", function(req, res) {
 
 });
 
-app.post("/update", function(req, res) {
+app.post("/updateprogress", function(req, res) {
     let data = req.body;
     if (!data.hasOwnProperty("username") || !data.hasOwnProperty("runningProgress")) {
         res.status(400);
@@ -90,16 +90,16 @@ app.get("/searchinfo", function(req, res) {
     let username = req.query.username;
 
     pool.query("SELECT * FROM info WHERE username = $1", [username]).then(function(response) {
-        info = response.rows;
+        let info = response.rows;
 
-        if (info.size() === 0) {
+        if (info[0] === undefined) {
             res.status(400);
             res.json({"error": "username does not exist"});
         }
-        if (!info[0].public) {
+        else if (!info[0].public) {
             console.log("Private information");
             res.status(500);
-            res.json({"Error": "No permission. The infomation is set to private."});
+            res.json({"error": "No permission. The infomation is set to private."});
         } else {
             res.status(200);
             res.json({"info": info});
