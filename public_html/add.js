@@ -1,5 +1,6 @@
 /* Global variable to control loggin state */
 let authenticate = false;
+let global_username = "";
 
 /* Functions for user login */
 function getLoginInfo(){
@@ -23,10 +24,14 @@ function getNewUser(){
     return {"username": username, "password": pw};
 }
 
+/* Function for calculating BMI */
+function getBMI(h, w){
+    return w/((h/100.0)*(h/100.0));
+}
+
 /* Functions for add running data */
 function getGoal() {
-	let usernameInput = document.getElementById("data-username");
-	let username = usernameInput.value;
+    let username = global_username;
 
     let ageInput = document.getElementById("age");
 	let age = ageInput.value;
@@ -37,8 +42,7 @@ function getGoal() {
     let weightInput = document.getElementById("weight");
 	let weight = weightInput.value;
 
-    let bmiInput = document.getElementById("bmi");
-	let bmi = bmiInput.value;
+	let bmi = getBMI(height, weight);
 
 	let privacyOptions = document.getElementsByName("privacy");
     let privacy;
@@ -52,18 +56,6 @@ function getGoal() {
     let runningGoalInput = document.getElementById("running-goal");
 	let runningGoal = runningGoalInput.value;
 
-    let runningProgressInput = document.getElementById("running-progress");
-	let runningProgress = runningProgressInput.value;
-
-    let achievedGoalOptions = document.getElementsByName("achieved-goal");
-    let achievedGoal;
-    for (const opt2 of achievedGoalOptions){
-        if (opt2.checked){
-            // achieved the Goal: yes or no
-            achievedGoal = opt2.value;
-        }
-    }
-
 	return {"username": username, 
             "age": age, 
             "height": height, 
@@ -71,9 +63,14 @@ function getGoal() {
             "bmi": bmi, 
             "public": privacy,
             "runningGoal": runningGoal,
-            "runningProgress": runningProgress,
-            "achievedGoal": achievedGoal,    
         };
+}
+
+/* Functions for adding running progress data. */
+function getRunningProgress(){
+    let progressInput = document.getElementById("running-progress");
+    let runningProgress = progressInput.value;
+    return {"username": global_username, "runningProgress": runningProgress};
 }
 
 /* Functions for Updating data. */
@@ -85,15 +82,10 @@ function getUpdateCategory() {
 }
 
 function getUpdateData(){
-    let updateDateInput = document.getElementById("update-date");
-    let updateDate = updateDateInput.value;
-
     let category = getUpdateCategory();
-
     let contentInput = document.getElementById("update-data");
     let newContent = contentInput.value;
-
-    return {"date": updateDate, "category": category, "newContent": newContent};
+    return {"username": global_username, "category": category, "newContent": newContent};
 }
 
 /* Handles Buttons click events */
@@ -109,6 +101,7 @@ loginButton.addEventListener("click", function(){
         if (response.status === 200){
             msg.textContent = `Login Successfully. You are logged in as ${loginInfo.username}`;
             authenticate = true;
+            global_username = loginInfo.username;
         }
         else{
             response.json().then(function(data){
@@ -120,6 +113,7 @@ loginButton.addEventListener("click", function(){
     });
 });
 
+/* Create new user button */
 let createButton = document.getElementById("create-button");
 createButton.addEventListener("click", function(){
     let newUserInfo = getNewUser();
@@ -132,6 +126,7 @@ createButton.addEventListener("click", function(){
         if (response.status === 200){
             msg.textContent = `Create New User Successfully. You are logged in as ${newUserInfo.username}`;
             authenticate = true;
+            global_username = newUserInfo.username;
         }
         else{
             response.json().then(function(data){
@@ -143,27 +138,28 @@ createButton.addEventListener("click", function(){
     });
 });
 
-let addButton = document.getElementById("add-button");
-addButton.addEventListener("click", function(){
+/* Add new Goal button handler */
+let addGoalButton = document.getElementById("add-goal-button");
+addGoalButton.addEventListener("click", function(){
     if (!authenticate){
         alert("Please login or create a new account first.");
         return;
     }
 
-    let runningData = getGoal();
+    let runningGoalData = getGoal();
     console.log(runningData);
     fetch("/add", {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify(runningData),
+        body: JSON.stringify(runningGoalData),
     }).then(function(response){
         let msg = document.getElementById("msg");
         if (response.status == 200){
-            msg.textContent = "Successfully added running data.";
+            msg.textContent = "Successfully added running Goal.";
         }
         else{
             response.json().then(function(data){
-                msg.textContent = "Add Data Failed. " + data.error;
+                msg.textContent = "Add Running Goal Failed. " + data.error;
             })
         }
     }). catch(function(error){
@@ -171,6 +167,36 @@ addButton.addEventListener("click", function(){
     }); 
 });
 
+/* Add Progress button handler */
+let addProgressButton = document.getElementById("add-progress-button");
+addProgressButton.addEventListener("click", function(){
+    if (!authenticate){
+        alert("Please login or create a new account first.");
+        return;
+    }
+
+    let runningProgressData = getRunningProgress();
+    console.log(updateData);
+    fetch("/updateprogress", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json',},
+        body: JSON.stringify(updateData),
+    }).then(function(response){
+        let msg = document.getElementById("msg");
+        if (response.status == 200){
+            msg.textContent = "Successfully added running progress.";
+        }
+        else{
+            response.json().then(function(data){
+                msg.textContent = "Adding Running Progress Failed. " + data.error;
+            })
+        }
+    }). catch(function(error){
+        console.log(error);
+    }); 
+});
+
+/* Update Data button handler */
 let updateButton = document.getElementById("update-button");
 updateButton.addEventListener("click", function(){
     if (!authenticate){
@@ -180,14 +206,14 @@ updateButton.addEventListener("click", function(){
 
     let updateData = getUpdateData();
     console.log(updateData);
-    fetch("/update", {
+    fetch("/updatedata", {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(updateData),
     }).then(function(response){
         let msg = document.getElementById("msg");
         if (response.status == 200){
-            msg.textContent = "Successfully updated running data.";
+            msg.textContent = "Successfully updated data.";
         }
         else{
             response.json().then(function(data){
