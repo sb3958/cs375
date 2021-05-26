@@ -31,18 +31,27 @@
             padding-left: 2%;
             padding-bottom: 0.5%;
         }
-        .data-div {
+        .data-field{
+            width: 30%;
             position: fixed;
-            top: 42%;
-            margin-left: 40%;
+            top: 50%;
+        }
+        .goal {
+            left: 0;
+            margin-left: 0.5%;
             border: 1px solid black;
             padding: 0.5rem;
             font-weight: bold;
         }
-        .update-div {
-            position: fixed;
-            top: 75%;
-            margin-left: 42%;
+        .update {
+            right: 0;
+            margin-right: 0.5%;
+            border: 1px solid black;
+            padding: 0.5rem;
+            font-weight: bold;
+        }
+        .progress {
+            right: 34.5%;
             border: 1px solid black;
             padding: 0.5rem;
             font-weight: bold;
@@ -92,7 +101,7 @@
     <button id="create-button">Create account</button>
 </div>
 
-<div class="data-div">
+<div class="data-field goal">
     <h2>Setting Up Running Goal</h2>
     <div>
         <div>
@@ -112,10 +121,6 @@
             <input id="weight" type="number" value="">
         </div>
         <div>
-            <label for="bmi">BMI:</label>
-            <input id="bmi" type="number" value="">
-        </div>
-        <div>
             <label>Privacy:</label>
             <input type="radio" name="privacy" value="yes">
             <label>Public</label>
@@ -126,28 +131,13 @@
             <label for="running-goal">Running Goal(km):</label>
             <input id="running-goal" type="number" value="">
         </div>
-        <div>
-            <label for="running-progess">Running Progress Today(km):</label>
-            <input id="running-progess" type="number" value="">
-        </div>
-        <div>
-            <label>Have you achieved the Goal?</label>
-            <input type="radio" name="achieved-goal" value="yes">
-            <label>Yes</label>
-            <input type="radio" name="achieved-goal" value="no">
-            <label>No</label>
-        </div>
     </div>
     <button id="add-button">Add</button>
 </div>
 
-<div class="update-div">
-    <h2>Update data</h2>
+<div class="data-field progress">
+    <h2>Add Running Progress</h2>
     <div>
-        <div>
-            <label for="update-date">Updating Date:</label>
-            <input id="update-date" type="text" name="update-date">
-        </div>
         <div>
             <label for="category">Category:</label>
             <select id="category" name="category">
@@ -159,6 +149,29 @@
                 <option value="privacy">Privacy</option>
                 <option value="goal">Running Goal</option>
                 <option value="progress">Running Progress</option>
+            </select>
+        </div>
+        <div>
+            <label for="update-data">Content:</label>
+            <input id="update-data" type="text" value="Enter new value here">
+        </div>
+    </div>
+    <button id="add-progress-button">Update</button>
+    <p><a href="search.html">Search your data</a></p>
+</div>
+
+<div class="data-field update">
+    <h2>Update data</h2>
+    <div>
+        <div>
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <option value="">Please select a category to update</option>
+                <option value="age">Age</option>
+                <option value="height">Height</option>
+                <option value="weight">Weight</option>
+                <option value="privacy">Privacy</option>
+                <option value="goal">Running Goal</option>
             </select>
         </div>
         <div>
