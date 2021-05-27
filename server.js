@@ -83,8 +83,23 @@ app.post("/updateprogress", function(req, res) {
         pool.query("INSERT INTO progress(username, progress, date) VALUES($1,$2,$3) RETURNING *",
         [data.username, data.runningProgress, date]);
 
-        res.status(200);
-        res.send();
+        pool.query("SELECT * FROM progress WHERE username = $1", [data.username]).then(function(response){
+            let sum = 0;
+            for (let row of response.rows) {
+                sum += row.progress;
+            }
+            pool.query("SELECT * FROM info WHERE username = $1", [data.username]).then(function(response){
+                let goal = response.rows[0].runninggoal;
+                if (sum >= goal) {
+                    pool.query("UPDATE info SET achieved = true WHERE username = $1", [data.username]);
+                    res.status(200);
+                    res.json({"achieved": true});
+                } else {
+                    res.status(200);
+                    res.json({"achieved": false});
+                }
+            });
+        });
     }
 })
 
