@@ -106,6 +106,8 @@ loginButton.addEventListener("click", function(){
         else{
             response.json().then(function(data){
                 msg.textContent = "Login Failed. " + data.error;
+                authenticate = false;
+                global_username = "";
             })
         }
     }).catch(function(err){
@@ -147,7 +149,6 @@ addGoalButton.addEventListener("click", function(){
     }
 
     let runningGoalData = getGoal();
-    console.log(runningData);
     fetch("/add", {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
@@ -176,11 +177,10 @@ addProgressButton.addEventListener("click", function(){
     }
 
     let runningProgressData = getRunningProgress();
-    console.log(updateData);
     fetch("/updateprogress", {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify(updateData),
+        body: JSON.stringify(runningProgressData),
     }).then(function(response){
         let msg = document.getElementById("msg");
         if (response.status == 200){
@@ -205,7 +205,6 @@ updateButton.addEventListener("click", function(){
     }
 
     let updateData = getUpdateData();
-    console.log(updateData);
     fetch("/updatedata", {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
