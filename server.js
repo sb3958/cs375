@@ -23,34 +23,31 @@ app.post("/add", function(req, res) {
         res.status(400);
         res.json({"error": "bad request"});
     }
-    else if (!Number.isFinite(data.height)) {
+    else if (!isFinite(data.height) || data.height <= 0) {
         res.status(400);
         res.json({"error": "invalid height"});
     }
-    else if (!Number.isFinite(data.weight)) {
+    else if (!isFinite(data.weight) || data.weight <= 0) {
         res.status(400);
         res.json({"error": "invalid weight"});
     }
-    else if (!Number.isFinite(data.bmi)) {
-        res.status(400);
-        res.json({"error": "invalid BMI"});
-    }
-    else if (!Number.isInteger(data.age)) {
+    else if (!isFinite(data.age) || data.weight <= 0) {
         res.status(400);
         res.json({"error": "invalid age"});
     }
-    else if (!Number.isFinite(data.runningGoal)) {
+    else if (!isFinite(data.runningGoal) || data.runningGoal <= 0) {
         res.status(400);
         res.json({"error": "invalid running goal"});
     }
     else {
 
+        let bmi = getBMI(data.weight, data.height);
         pool.query("DELETE FROM info WHERE username = $1", [data.username]);
         pool.query("DELETE FROM progress WHERE username = $1", [data.username]);
 
         pool.query(
             "INSERT INTO info(username, height, weight, bmi, public, runninggoal, achieved, age) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
-            [data.username, data.height, data.weight, data.bmi, data.public, data.runningGoal, "no", data.age]
+            [data.username, parseFloat(data.height), parseFloat(data.weight), bmi, data.public, parseFloat(data.runningGoal), "no", parseInt(data.age)]
         ).then(function(response) {
             res.status(200);
             res.send();
@@ -59,7 +56,69 @@ app.post("/add", function(req, res) {
             res.json({"error": error});
         });
     }
+});
 
+function getBMI(w,h) {
+    return w / ((h/100.0)*(h/100.0))
+}
+
+function updateBMI(w,h,username) {
+    let bmi = getBMI(w, h);
+    pool.query("UPDATE info SET bmi = $1 WHERE username = $2", [bmi, username]);
+}
+
+function updateColumn(cat, con, username) {
+    pool.query("UPDATE info SET $1 = $2 WHERE username = $3", [cat, con, username]);
+}
+
+function convertToNumber(input) {
+    let convertedInput
+    convertedInput = parseFloat(input);
+    return convertedInput;
+}
+
+app.post("/updateinfo", function(req, res){
+    let data = req.body;
+    let cat = data.category;
+    let input;
+    if (!data.hasOwnProperty("username") || !data.hasOwnProperty("category") || !data.hasOwnProperty("content") || cat === "") {
+        res.status(400);
+        res.json({"error": "bad request"});
+    } else if (cat === "height" || cat === "weight") {
+        input = convertToNumber(data.content);
+        if (input === "NaN" || converted <= 0) {
+            res.status(400);
+            res.json({"error": "invalid input"})
+        }
+        else {
+            if (cat === "height") {
+                pool.query("SELECT * FROM info WHERE username = $1", [data.username]).then(function(response){
+                    updateBMI(response.rows[0].weight, input, data.username);
+                });
+            } else {
+                pool.query("SELECT * FROM info WHERE username = $1", [data.username]).then(function(response){
+                    updateBMI(input, response.rows[0].height, data.username);
+                });
+            }
+            res.status(200);
+            updateColumn(cat, input, data.username);
+            res.send();
+        }
+    } else if (cat === "age" || cat === "runninggoal") {
+        input = convertToNumber(data.content);
+        if (input === "NaN" || input <= 0) {
+            res.status(400);
+            res.json({"error": "invalid input"});
+        } else {
+            updateColumn(cat, input, data.username);
+            res.status(200);
+            res.send();
+        }
+    } else {
+        updateColumn(cat, data.content, data.username);
+        res.status(200);
+        res.send();
+    }
 });
 
 app.post("/updateprogress", function(req, res) {
@@ -68,7 +127,7 @@ app.post("/updateprogress", function(req, res) {
         res.status(400);
         res.json({"error": "bad request"});
     }
-    else if (!Number.isFinite(data.runningProgress)) {
+    else if (!isFinite(data.runningProgress) || data.runningProgress <= 0) {
         res.status(400);
         res.json({"error": "invalid running progress"});
     }
@@ -81,12 +140,12 @@ app.post("/updateprogress", function(req, res) {
         let date = mm+'/'+dd+'/'+yyyy;
 
         pool.query("INSERT INTO progress(username, progress, date) VALUES($1,$2,$3) RETURNING *",
-        [data.username, data.runningProgress, date]);
+        [data.username, parseFloat(data.runningProgress), date]);
 
         pool.query("SELECT * FROM progress WHERE username = $1", [data.username]).then(function(response){
             let sum = 0;
             for (let row of response.rows) {
-                sum += row.progress;
+                sum += parseFloat(row.progress);
             }
             pool.query("SELECT * FROM info WHERE username = $1", [data.username]).then(function(response){
                 let goal = response.rows[0].runninggoal;
@@ -95,6 +154,7 @@ app.post("/updateprogress", function(req, res) {
                     res.status(200);
                     res.json({"achieved": true});
                 } else {
+                    pool.query("UPDATE info SET achieved = false WHERE username = $1", [data.username]);
                     res.status(200);
                     res.json({"achieved": false});
                 }
