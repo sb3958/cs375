@@ -7,6 +7,13 @@ h1 {
 	text-align: center;
 }
 
+#message {
+	margin: 25px;
+	color: white;
+	font-size: large;
+	font-weight: bolder;
+}
+
 #search {
 	background-color: lightblue;
 	color: blue;
@@ -52,4 +59,10 @@ th {
 
 #table-header {
 	background-color: lightblue;
+}
+
+#search-chart {
+	width: 500px;
+	height: 500px;
+	margin-top: 25px;
 }
