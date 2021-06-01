@@ -25,9 +25,9 @@ function getNewUser(){
 }
 
 /* Function for calculating BMI */
-function getBMI(h, w){
-    return w/((h/100.0)*(h/100.0));
-}
+// function getBMI(h, w){
+//     return w/((h/100.0)*(h/100.0));
+// }
 
 /* Functions for add running data */
 function getGoal() {
@@ -42,7 +42,7 @@ function getGoal() {
     let weightInput = document.getElementById("weight");
 	let weight = weightInput.value;
 
-	let bmi = getBMI(height, weight);
+	// let bmi = getBMI(height, weight);
 
 	let privacyOptions = document.getElementsByName("privacy");
     let privacy;
@@ -60,7 +60,6 @@ function getGoal() {
             "age": age, 
             "height": height, 
             "weight": weight, 
-            "bmi": bmi, 
             "public": privacy,
             "runningGoal": runningGoal,
         };
