@@ -83,8 +83,12 @@ function getUpdateCategory() {
 function getUpdateData(){
     let category = getUpdateCategory();
     let contentInput = document.getElementById("update-data");
-    let newContent = contentInput.value;
-    return {"username": global_username, "category": category, "newContent": newContent};
+    let newContent;
+    if (category == "public")
+        newContent = contentInput.value.toLowerCase();
+    else
+        newContent = contentInput.value;
+    return {"username": global_username, "category": category, "content": newContent};
 }
 
 /* Handles Buttons click events */
@@ -170,6 +174,9 @@ addGoalButton.addEventListener("click", function(){
 /* Add Progress button handler */
 let addProgressButton = document.getElementById("add-progress-button");
 addProgressButton.addEventListener("click", function(){
+    let achievedMsg = document.getElementById("achieved-msg");
+    achievedMsg.textContent = "";
+
     if (!authenticate){
         alert("Please login or create a new account first.");
         return;
@@ -185,7 +192,6 @@ addProgressButton.addEventListener("click", function(){
         if (response.status == 200){
             msg.textContent = "Successfully added running progress.";
             response.json().then(function(data){
-                let achievedMsg = document.getElementById("achieved-msg");
                 if (data.achieved)
                     achievedMsg.textContent = "Congratulations! You have achieved the goal!"
                 else
@@ -205,13 +211,28 @@ addProgressButton.addEventListener("click", function(){
 /* Update Data button handler */
 let updateButton = document.getElementById("update-button");
 updateButton.addEventListener("click", function(){
+    let invalidContentMsg = document.getElementById("invalid-content-msg");
+    invalidContentMsg.textContent = "";
+
     if (!authenticate){
         alert("Please login or create a new account first.");
         return;
     }
 
+    /* Get Input to update data and perform some client verficiation */
     let updateData = getUpdateData();
-    fetch("/updatedata", {
+
+    if (updateData.category == "public" && updateData.content != "yes" && updateData.content != "no"){
+        invalidContentMsg.textContent = "Please only fill in \"yes\" or \"no\".";
+        return;
+    }
+    else if (!isFinite(updateData.content)){
+        invalidContentMsg.textContent = "Please fill in a number.";
+        return;
+    }
+
+    console.log(updateData);
+    fetch("/updateinfo", {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(updateData),
@@ -223,7 +244,7 @@ updateButton.addEventListener("click", function(){
         else{
             response.json().then(function(data){
                 msg.textContent = "Update Data Failed. " + data.error;
-            })
+            });
         }
     }). catch(function(error){
         console.log(error);
