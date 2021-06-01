@@ -59,16 +59,14 @@ app.post("/add", function(req, res) {
 });
 
 function getBMI(w,h) {
-    return w / ((h/100.0)*(h/100.0))
+    let weight = parseFloat(w);
+    let height = parseFloat(h);
+    return weight / ((height/100.0)*(height/100.0));
 }
 
 function updateBMI(w,h,username) {
     let bmi = getBMI(w, h);
     pool.query("UPDATE info SET bmi = $1 WHERE username = $2", [bmi, username]);
-}
-
-function updateColumn(cat, con, username) {
-    pool.query("UPDATE info SET $1 = $2 WHERE username = $3", [cat, con, username]);
 }
 
 function convertToNumber(input) {
@@ -80,13 +78,14 @@ function convertToNumber(input) {
 app.post("/updateinfo", function(req, res){
     let data = req.body;
     let cat = data.category;
+    let username = data.username;
     let input;
     if (!data.hasOwnProperty("username") || !data.hasOwnProperty("category") || !data.hasOwnProperty("content") || cat === "") {
         res.status(400);
         res.json({"error": "bad request"});
     } else if (cat === "height" || cat === "weight") {
         input = convertToNumber(data.content);
-        if (input === "NaN" || converted <= 0) {
+        if (input === "NaN" || input <= 0) {
             res.status(400);
             res.json({"error": "invalid input"})
         }
@@ -95,13 +94,14 @@ app.post("/updateinfo", function(req, res){
                 pool.query("SELECT * FROM info WHERE username = $1", [data.username]).then(function(response){
                     updateBMI(response.rows[0].weight, input, data.username);
                 });
+                pool.query("UPDATE info SET height = $1 WHERE username = $2", [input, username]);
             } else {
                 pool.query("SELECT * FROM info WHERE username = $1", [data.username]).then(function(response){
                     updateBMI(input, response.rows[0].height, data.username);
                 });
+                pool.query("UPDATE info SET weight = $1 WHERE username = $2", [input, username]);
             }
             res.status(200);
-            updateColumn(cat, input, data.username);
             res.send();
         }
     } else if (cat === "age" || cat === "runninggoal") {
@@ -110,14 +110,27 @@ app.post("/updateinfo", function(req, res){
             res.status(400);
             res.json({"error": "invalid input"});
         } else {
-            updateColumn(cat, input, data.username);
+            if (cat === "age") {
+                pool.query("UPDATE info SET age = $1 WHERE username = $2", [input, username]);
+            }
+            else {
+                pool.query("UPDATE info SET runningGoal = $1 WHERE username = $2", [input, username]);
+            }
             res.status(200);
             res.send();
         }
+    } else if (cat === "public"){
+        pool.query("UPDATE info SET public = $1 WHERE username = $2", [data.content, username]).then(function(response){
+            res.status(200);
+            res.send();
+        }).catch(function(error) {
+            res.status(400);
+            res.json({"error": "invalid content"});
+        })
+        
     } else {
-        updateColumn(cat, data.content, data.username);
-        res.status(200);
-        res.send();
+        res.status(400);
+        res.json({"error": "invalid category"});
     }
 });
 
