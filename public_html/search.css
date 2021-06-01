@@ -66,3 +66,10 @@ th {
 	height: 500px;
 	margin-top: 25px;
 }
+
+.mapSearchDiv label {
+	text-align: center;
+	display: block;
+	margin: 25px;
+	font-size: x-large;
+}

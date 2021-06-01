@@ -20,6 +20,7 @@ function goal(data){
     }}
 }
 
+
 let table = document.getElementById("table-body");
 let button = document.getElementById("search");
 button.addEventListener("click", function(){
@@ -40,7 +41,6 @@ button.addEventListener("click", function(){
                     }
                     table.append(row);
                 }
-
                 
                 let progressUrl = `/searchprogress?username=${username}`
                 console.log("Search Progress "+ progressUrl)
@@ -77,13 +77,50 @@ button.addEventListener("click", function(){
                                 ]
 
                             },
-                            /*options: {
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: `${user}'s Fitness Performance`,
+                                        font:{
+                                            size: 25,
+                                            weight: 'bold',
+                                            family: 'Times'
+                                        },
+                                        color: '#FFFFFF',
+                                    },
+                                },
                                 scales:{
-                                    axisY: [{
-                                        label: "Running Progress"
-                                    }]
+                                    x: {
+                                        display: true,
+                                        title: {
+                                          display: true,
+                                          text: 'Dates',
+                                          font:{
+                                            size: 25,
+                                            weight: 'bold',
+                                            family: 'Times'
+                                        },
+                                          color: '#FFFFFF',
+                                        },
+                                    },
+                                      y: {
+                                        display: true,
+                                        title: {
+                                          display: true,
+                                          text: 'Running Progress',
+                                          font:{
+                                            size: 25,
+                                            weight: 'bold',
+                                            family: 'Times'
+                                        },
+                                          color: '#FFFFFF',
+                                        
+                                        },
+                                      }
                                 }
-                            }*/
+                            }
                             
                         });
                         
