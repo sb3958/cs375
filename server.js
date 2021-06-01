@@ -126,7 +126,7 @@ app.post("/updateinfo", function(req, res){
         }).catch(function(error) {
             res.status(400);
             res.json({"error": "invalid content"});
-        })
+        });
         
     } else {
         res.status(400);
@@ -271,7 +271,7 @@ app.post("/login", function(req, res) {
             res.status(401);
             res.json({"error": error});
         });
-})
+});
 
 function ownProperty(data) {
     let propertyList = [
@@ -279,7 +279,6 @@ function ownProperty(data) {
         "age",
         "height",
         "weight",
-        "bmi",
         "public",
         "runningGoal"
     ]
