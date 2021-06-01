@@ -184,6 +184,13 @@ addProgressButton.addEventListener("click", function(){
         let msg = document.getElementById("msg");
         if (response.status == 200){
             msg.textContent = "Successfully added running progress.";
+            response.json().then(function(data){
+                let achievedMsg = document.getElementById("achieved-msg");
+                if (data.achieved)
+                    achievedMsg.textContent = "Congratulations! You have achieved the goal!"
+                else
+                    achievedMsg.textContent = "You are making progress! Keep going!"
+            });
         }
         else{
             response.json().then(function(data){
