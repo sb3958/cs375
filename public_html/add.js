@@ -146,6 +146,9 @@ createButton.addEventListener("click", function(){
 /* Add new Goal button handler */
 let addGoalButton = document.getElementById("add-goal-button");
 addGoalButton.addEventListener("click", function(){
+    let addGoalMsg = document.getElementById("add-goal-msg");
+    addGoalMsg.textContent = ""
+
     if (!authenticate){
         alert("Please login or create a new account first.");
         return;
@@ -157,13 +160,12 @@ addGoalButton.addEventListener("click", function(){
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(runningGoalData),
     }).then(function(response){
-        let msg = document.getElementById("msg");
         if (response.status == 200){
-            msg.textContent = "Successfully added running Goal.";
+            addGoalMsg.textContent = `Congratulations! New Running Goal Added for ${runningGoalData.username}!`;
         }
         else{
             response.json().then(function(data){
-                msg.textContent = "Add Running Goal Failed. " + data.error;
+                addGoalMsg.textContent = "Add Running Goal Failed. " + data.error;
             })
         }
     }). catch(function(error){
@@ -188,19 +190,19 @@ addProgressButton.addEventListener("click", function(){
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(runningProgressData),
     }).then(function(response){
-        let msg = document.getElementById("msg");
+        // let msg = document.getElementById("msg");
         if (response.status == 200){
-            msg.textContent = "Successfully added running progress.";
+            // msg.textContent = "Successfully added running progress.";
             response.json().then(function(data){
                 if (data.achieved)
-                    achievedMsg.textContent = "Congratulations! You have achieved the goal!"
+                    achievedMsg.textContent = "Congratulations! You have achieved the goal!";
                 else
-                    achievedMsg.textContent = "You are making progress! Keep going!"
+                    achievedMsg.textContent = `You are making progress ${runningProgressData.runningProgress} km! Keep going!`;
             });
         }
         else{
             response.json().then(function(data){
-                msg.textContent = "Adding Running Progress Failed. " + data.error;
+                achievedMsg.textContent = "Adding Running Progress Failed. " + data.error;
             })
         }
     }). catch(function(error){
@@ -212,7 +214,9 @@ addProgressButton.addEventListener("click", function(){
 let updateButton = document.getElementById("update-button");
 updateButton.addEventListener("click", function(){
     let invalidContentMsg = document.getElementById("invalid-content-msg");
+    let updateMsg = document.getElementById("update-msg");
     invalidContentMsg.textContent = "";
+    updateMsg.textContent = "";
 
     if (!authenticate){
         alert("Please login or create a new account first.");
@@ -226,24 +230,22 @@ updateButton.addEventListener("click", function(){
         invalidContentMsg.textContent = "Please only fill in \"yes\" or \"no\".";
         return;
     }
-    else if (!isFinite(updateData.content)){
+    else if (updateData.category != "public" && !isFinite(updateData.content)){
         invalidContentMsg.textContent = "Please fill in a number.";
         return;
     }
 
-    console.log(updateData);
     fetch("/updateinfo", {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(updateData),
     }).then(function(response){
-        let msg = document.getElementById("msg");
         if (response.status == 200){
-            msg.textContent = "Successfully updated data.";
+            updateMsg.textContent = `Successfully Updated ${updateData.category} Info for ${updateData.username}.`;
         }
         else{
             response.json().then(function(data){
-                msg.textContent = "Update Data Failed. " + data.error;
+                updateMsg.textContent = "Update Data Failed. " + data.error;
             });
         }
     }). catch(function(error){
