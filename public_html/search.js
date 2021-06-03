@@ -20,10 +20,11 @@ function goal(data){
     }}
 }
 
-
+let count = 0;
 let table = document.getElementById("table-body");
 let button = document.getElementById("search");
 button.addEventListener("click", function(){
+    count += 1;
     let username = getUsername();
     let infoUrl = `/searchinfo?username=${username}`
     fetch(infoUrl).then (function (response){
@@ -57,72 +58,147 @@ button.addEventListener("click", function(){
                             runDate.push(date)
                         }
                         var chart = document.getElementById("search-chart");
-                        var searchChart = new Chart(chart, {
-                            type: 'line',
-                            data: {
-                                labels: runDate,
-                                datasets:[
-                                    {
-                                        label: `${user}'s Running Progress`,
-                                        data: runningProgress,
-                                        fill: false,
-                                        borderColor: 'rgb(255, 159, 64)',
-                                        lineTension: 0.1,
-                                        pointBorderColor: 'rgb(0,0,0)',
-                                        pointBackgroundColor: 'rgb(0,35,102)',
-                                        pointBorderwidth: 100,
-                                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                                        borderWidth: 1,
-                                    }
-                                ]
+                        var searchChart;
+                        
+                        if (count < 1){
+                            searchChart.destroy();
+                            searchChart = new Chart(chart, {
+                                type: 'line',
+                                data: {
+                                    labels: runDate,
+                                    datasets:[
+                                        {
+                                            label: `${user}'s Running Progress`,
+                                            data: runningProgress,
+                                            fill: false,
+                                            borderColor: 'rgb(255, 159, 64)',
+                                            lineTension: 0.1,
+                                            pointBorderColor: 'rgb(0,0,0)',
+                                            pointBackgroundColor: 'rgb(0,35,102)',
+                                            pointBorderwidth: 100,
+                                            backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                                            borderWidth: 1,
+                                        }
+                                    ]
 
-                            },
-                            options: {
-                                responsive: true,
-                                plugins: {
-                                    title: {
-                                        display: true,
-                                        text: `${user}'s Fitness Performance`,
-                                        font:{
-                                            size: 25,
-                                            weight: 'bold',
-                                            family: 'Times'
-                                        },
-                                        color: '#FFFFFF',
-                                    },
                                 },
-                                scales:{
-                                    x: {
-                                        display: true,
+                                options: {
+                                    responsive: true,
+                                    plugins: {
                                         title: {
-                                          display: true,
-                                          text: 'Dates',
-                                          font:{
-                                            size: 25,
-                                            weight: 'bold',
-                                            family: 'Times'
-                                        },
-                                          color: '#FFFFFF',
+                                            display: true,
+                                            text: `${user}'s Fitness Performance`,
+                                            font:{
+                                                size: 25,
+                                                weight: 'bold',
+                                                family: 'Times'
+                                            },
+                                            color: '#FFFFFF',
                                         },
                                     },
-                                      y: {
-                                        display: true,
-                                        title: {
-                                          display: true,
-                                          text: 'Running Progress',
-                                          font:{
-                                            size: 25,
-                                            weight: 'bold',
-                                            family: 'Times'
+                                    scales:{
+                                        x: {
+                                            display: true,
+                                            title: {
+                                            display: true,
+                                            text: 'Dates',
+                                            font:{
+                                                size: 25,
+                                                weight: 'bold',
+                                                family: 'Times'
+                                            },
+                                            color: '#FFFFFF',
+                                            },
                                         },
-                                          color: '#FFFFFF',
-                                        
-                                        },
-                                      }
+                                        y: {
+                                            display: true,
+                                            title: {
+                                            display: true,
+                                            text: 'Running Progress',
+                                            font:{
+                                                size: 25,
+                                                weight: 'bold',
+                                                family: 'Times'
+                                            },
+                                            color: '#FFFFFF',
+                                            
+                                            },
+                                        }
+                                    }
                                 }
-                            }
-                            
-                        });
+                                
+                            });
+
+                        }
+                        else{
+                            searchChart = new Chart(chart, {
+                                type: 'line',
+                                data: {
+                                    labels: runDate,
+                                    datasets:[
+                                        {
+                                            label: `${user}'s Running Progress`,
+                                            data: runningProgress,
+                                            fill: false,
+                                            borderColor: 'rgb(255, 159, 64)',
+                                            lineTension: 0.1,
+                                            pointBorderColor: 'rgb(0,0,0)',
+                                            pointBackgroundColor: 'rgb(0,35,102)',
+                                            pointBorderwidth: 100,
+                                            backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                                            borderWidth: 1,
+                                        }
+                                    ]
+
+                                },
+                                options: {
+                                    responsive: true,
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: `${user}'s Fitness Performance`,
+                                            font:{
+                                                size: 25,
+                                                weight: 'bold',
+                                                family: 'Times'
+                                            },
+                                            color: '#FFFFFF',
+                                        },
+                                    },
+                                    scales:{
+                                        x: {
+                                            display: true,
+                                            title: {
+                                            display: true,
+                                            text: 'Dates',
+                                            font:{
+                                                size: 25,
+                                                weight: 'bold',
+                                                family: 'Times'
+                                            },
+                                            color: '#FFFFFF',
+                                            },
+                                        },
+                                        y: {
+                                            display: true,
+                                            title: {
+                                            display: true,
+                                            text: 'Running Progress',
+                                            font:{
+                                                size: 25,
+                                                weight: 'bold',
+                                                family: 'Times'
+                                            },
+                                            color: '#FFFFFF',
+                                            
+                                            },
+                                        }
+                                    }
+                                }
+                                
+                            });
+                    }
+                    
                         
                     })
                 })

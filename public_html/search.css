@@ -45,6 +45,11 @@ th {
 	padding: 10px;
 }
 
+.search-table {
+	margin-left: auto;
+	margin-right: auto;
+}
+
 #username {
 	display: block;
 	margin-right: auto;
@@ -91,4 +96,4 @@ th {
 
 #mapSearch:focus {
 	border-color: #4d90fe;
-  }
+}
