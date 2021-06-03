@@ -152,25 +152,27 @@ app.post("/updateprogress", function(req, res) {
 
         let date = mm+'/'+dd+'/'+yyyy;
 
-        pool.query("INSERT INTO progress(username, progress, date) VALUES($1,$2,$3) RETURNING *",
-        [data.username, parseFloat(data.runningProgress), date]);
+        let sum = 0;
 
-        pool.query("SELECT * FROM progress WHERE username = $1", [data.username]).then(function(response){
-            let sum = 0;
-            for (let row of response.rows) {
-                sum += parseFloat(row.progress);
-            }
+        pool.query("INSERT INTO progress(username, progress, date) VALUES($1,$2,$3) RETURNING *",
+        [data.username, parseFloat(data.runningProgress), date]).then(function(response){
             pool.query("SELECT * FROM info WHERE username = $1", [data.username]).then(function(response){
-                let goal = response.rows[0].runninggoal;
-                if (sum >= goal) {
-                    pool.query("UPDATE info SET achieved = true WHERE username = $1", [data.username]);
-                    res.status(200);
-                    res.json({"achieved": true});
-                } else {
-                    pool.query("UPDATE info SET achieved = false WHERE username = $1", [data.username]);
-                    res.status(200);
-                    res.json({"achieved": false});
-                }
+                let goal = parseFloat(response.rows[0].runninggoal);
+                pool.query("SELECT * FROM progress WHERE username = $1", [data.username]).then(function(response) {
+                    for (let row of response.rows) {
+                        console.log(row.progress);
+                        sum += parseFloat(row.progress);
+                    }
+                    if (sum >= goal) {
+                        pool.query("UPDATE info SET achieved = true WHERE username = $1", [data.username]);
+                        res.status(200);
+                        res.json({"achieved": true});
+                    } else {
+                        pool.query("UPDATE info SET achieved = false WHERE username = $1", [data.username]);
+                        res.status(200);
+                        res.json({"achieved": false});
+                    }
+                });
             });
         });
     }
