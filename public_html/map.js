@@ -20,12 +20,12 @@ class AutocompleteDirectionsHandler {
     const destinationInput = document.getElementById("destination-input");
     const modeSelector = document.getElementById("mode-selector");
     const originAutocomplete = new google.maps.places.Autocomplete(originInput);
-    // Specify just the place data fields that you need.
+
     originAutocomplete.setFields(["place_id"]);
     const destinationAutocomplete = new google.maps.places.Autocomplete(
       destinationInput
     );
-    // Specify just the place data fields that you need.
+
     destinationAutocomplete.setFields(["place_id"]);
     this.setupClickListener(
       "changemode-walking",
@@ -47,8 +47,7 @@ class AutocompleteDirectionsHandler {
     );
     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
   }
-  // Sets a listener on a radio button to change the filter type on Places
-  // Autocomplete.
+
   setupClickListener(id, mode) {
     const radioButton = document.getElementById(id);
     radioButton.addEventListener("click", () => {
