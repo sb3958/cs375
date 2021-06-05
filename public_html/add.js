@@ -235,13 +235,21 @@ updateButton.addEventListener("click", function(){
         return;
     }
 
+    translateMap = {
+        'age': 'Age',
+        'height': 'Height',
+        'weight': 'Weight',
+        'public': 'Public',
+        'runninggoal': 'Running Goal',
+    }
+
     fetch("/updateinfo", {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(updateData),
     }).then(function(response){
         if (response.status == 200){
-            updateMsg.textContent = `Successfully Updated ${updateData.category} Info for ${updateData.username}.`;
+            updateMsg.textContent = `Successfully Updated ${translateMap[updateData.category]} for ${updateData.username}.`;
         }
         else{
             response.json().then(function(data){
