@@ -2,9 +2,10 @@
 # Fitness App
 
 #### Record the running progress and fitness data of users to achieve a running goal.
+#### Final deployed website on AWS: http://3.134.105.133:3000/
+
 
 #### Steps to run a local version of the webapp
-
 #### Prerequisite: Install Postgres Database, Git, NodeJS, NPM...
 
 #### Step 1: Clone git repo to your local machine by git clone https://github.com/sb3958/cs375.git
@@ -32,3 +33,4 @@
 ###### _________search.js
 ###### ____server.js
 ###### env.json
+
