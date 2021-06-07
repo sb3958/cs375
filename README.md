@@ -10,12 +10,12 @@
 #### Step 1: Clone git repo to your local machine by git clone https://github.com/sb3958/cs375.git
 #### Step 2: Setting up database for website. The website contains 3 tables in the backend: info table for user data 
 #### such as weight, height, age...; accounts table for username and hashed password; and progress table for user running progress data
-##### - Login to Postgres database with your Postgres username (postgres by default) and create a database by CREATE DATABASE fitness;
-##### - Create the 3 db tables by:
-##### CREATE TABLE accounts (username VARCHAR(50), hashedpassword VARCHAR(100));
-##### CREATE TABLE info (username VARCHAR(50), height INT, weight INT, bmi FLOAT, public BOOLEAN, runninggoal FLOAT, achieved BOOLEAN, age INT);
-##### CREATE TABLE progress (username VARCHAR(50), progress FLOAT, date VARCHAR(50));
-#### Step 3: Copy the env.json to the directory above our app directory (cs375). This will be the data used by our app to login and connect with Postgres DB.Change the user to your Postgres username and the according password.
+###### - Login to Postgres database with your Postgres username (postgres by default) and create a database by CREATE DATABASE fitness;
+###### - Create the 3 db tables by:
+###### CREATE TABLE accounts (username VARCHAR(50), hashedpassword VARCHAR(100));
+###### CREATE TABLE info (username VARCHAR(50), height INT, weight INT, bmi FLOAT, public BOOLEAN, runninggoal FLOAT, achieved BOOLEAN, age INT);
+###### CREATE TABLE progress (username VARCHAR(50), progress FLOAT, date VARCHAR(50));
+#### Step 3: Copy the env.json to the directory above our app directory (outside the cs375 folder). This will be the data used by our app to login and connect with Postgres DB.Change the user to your Postgres username and the according password.
 #### Step 4: Under our app directory (./cs375/), run 'npm install' to install supporting node modules. The node_modules folder should show up in our app directory.
 #### Step 5: Run the server by going to cs375 directory and run 'node server.js'. The terminal should print out listening on localhost at port 3000 and it has connected to the database.
 #### Step 6: On web browser, enter localhost:3000 and it should open up our main page. If you are new user, use the create new user field to create new account. If you are returning user, use the login field. You won't be able to use the app if you are not logged in.
