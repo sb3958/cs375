@@ -21,16 +21,17 @@ function goal(data){
 }
 
 
-let count = 0;
+var searchChart=null;
 let table = document.getElementById("table-body");
 let button = document.getElementById("search");
 button.addEventListener("click", function(){
-    count += 1;
     let username = getUsername();
     let infoUrl = `/searchinfo?username=${username}`
     fetch(infoUrl).then (function (response){
         return response.json().then (function (data){
             removeRows(table);
+            let message = document.getElementById("message");
+            message.textContent = "";
             if (response.status === 200){
                 goal(data.info);
                 for (let users of data.info){
@@ -58,8 +59,13 @@ button.addEventListener("click", function(){
                             let date = new Date(progressDate).toDateString();
                             runDate.push(date)
                         }
+                        
+                        if (searchChart != null){
+                            searchChart.destroy();
+                        }
+                        
                         var chart = document.getElementById("search-chart");
-                        var searchChart = new Chart(chart, {
+                        searchChart = new Chart(chart, {
                             type: 'line',
                             data: {
                                 labels: runDate,
@@ -130,8 +136,9 @@ button.addEventListener("click", function(){
                 
             }
             else{
-                let message = document.getElementById("message");
-                message.textContent = data.error;
+                let errorMessage = document.getElementById("message");
+                errorMessage.textContent = data.error;
+                searchChart.destroy();
             }
                            
 
