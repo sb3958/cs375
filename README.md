@@ -26,11 +26,15 @@
 #### Organization Structure of Fitness App.
 ###### cs375/
 ###### ____public_html/
-###### _________add.html
+###### _________index.html
 ###### _________add.js
 ###### _________logo.jpg
 ###### _________search.html
+###### _________search.css
 ###### _________search.js
+###### _________map.html
+###### _________map.js
+###### _________map.css
 ###### ____server.js
 ###### env.json
 
