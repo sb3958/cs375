@@ -46,10 +46,8 @@ button.addEventListener("click", function(){
                 }
                 
                 let progressUrl = `/searchprogress?username=${username}`
-                console.log("Search Progress "+ progressUrl)
                 fetch(progressUrl).then (function (progress){
                     return progress.json().then (function (progressData){
-                        console.log(progressData);
                         let runningProgress=[];
                         let runDate=[];
                         let user = progressData.progress[0].username;
